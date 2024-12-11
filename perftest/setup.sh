@@ -63,7 +63,7 @@ printf "#cloud-config\napt:\n  proxy: http://$BRIDGE_ADDRESS:8000\n" | $GROUP_FI
 echo "New $CONTAINER_MGR profile:"
 $GROUP_FIXUP_PREFIX $CONTAINER_MGR profile show firebuild-perftest
 
-$GROUP_FIXUP_PREFIX ./create_template_image
+#$GROUP_FIXUP_PREFIX ./create_template_image
 
 if [ $CONTAINER_MGR = "lxc" ]; then
     # Disable snap updates
