@@ -23,6 +23,6 @@ jobs:
         sudo apt-get -y install eatmydata
     - name: check with latest Ubuntu development version
       run: |
-        # skip check on Ubuntu development version with incus, because there are no such available images
+        # skip check on latest Ubuntu stable release with incus, because there may be no such available image
         (! which incus) || exit 0
-        sudo -u $USER env -C perftest ./create_template_image ubuntu-daily:devel
+        sudo -u $USER env -C perftest ./create_template_image ubuntu:$(distro-info -s)
