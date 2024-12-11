@@ -65,7 +65,7 @@ $CONTAINER_MGR launch -p firebuild-perftest "$BASE_IMG" $CONTAINER
 
 echo " · Waiting for system to start"
 sleep 1
-$CONTAINER_EXEC systemctl is-system-running --wait || true
+$CONTAINER_EXEC systemctl is-system-running --wait || $CONTAINER_EXEC systemctl list-units --failed
 
 $CONTAINER_EXEC systemctl restart systemd-networkd
 
