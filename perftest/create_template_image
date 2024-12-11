@@ -67,11 +67,13 @@ echo " · Waiting for system to start"
 sleep 1
 $CONTAINER_EXEC systemctl is-system-running --wait || true
 
+$CONTAINER_EXEC systemctl restart systemd-networkd
+
 $CONTAINER_EXEC sh -c 'echo debconf debconf/frontend select Noninteractive | debconf-set-selections'
 $CONTAINER_EXEC sh -c 'printf "Dpkg::Options:: \"--force-confdef\";\nDpkg::Options:: \"--force-confold\";\n" > /etc/apt/apt.conf.d/98-dpkg-confdef'
 
 $CONTAINER_EXEC sh -c 'echo "Acquire::Retries \"3\";" > /etc/apt/apt.conf.d/99-retry'
-ARCHIVE_MIRROR=$(grep 'archive\.ubuntu\.com' /etc/apt/sources.list | sed 's|.*http://||;s|/.*||;q')
+ARCHIVE_MIRROR=$(grep 'archive\.ubuntu\.com' /etc/apt/sources.list | sed 's|.*http://||;s|/.*||;')
 [ -z "${ARCHIVE_MIRROR}" ] || $CONTAINER_EXEC sh -c 'sed -i "s|[^/]*archive.ubuntu.com|'${ARCHIVE_MIRROR}'|" /etc/apt/sources.list'
 echo " · Adding deb-src entries to sources.list"
 $CONTAINER_EXEC sh -c 'sed -i "s/Types: deb/Types: deb deb-src/" /etc/apt/sources.list.d/*.sources /etc/cloud/templates/sources.list.ubuntu.deb822.tmpl' || true
